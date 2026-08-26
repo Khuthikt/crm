@@ -1,0 +1,269 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/var/www/html/crm/tests/system/playwright/node_modules/.bin/playwright",
+      "test",
+      "specs/prod-readonly-compat.spec.js"
+    ],
+    "configFile": "/var/www/html/crm/tests/system/playwright/playwright.config.js",
+    "rootDir": "/var/www/html/crm/tests/system/playwright/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/var/www/html/crm/tests/system/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "/var/www/html/crm/tests/system/playwright/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/var/www/html/crm/tests/system/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox-desktop",
+        "name": "firefox-desktop",
+        "testDir": "/var/www/html/crm/tests/system/playwright/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/var/www/html/crm/tests/system/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/var/www/html/crm/tests/system/playwright/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../results/playwright-report.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../results/playwright-html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "prod-readonly-compat.spec.js",
+      "file": "prod-readonly-compat.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Compatibility — production login screen (read-only)",
+          "file": "prod-readonly-compat.spec.js",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "login screen renders without console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2250,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T20:14:36.103Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "console-errors",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        },
+                        {
+                          "name": "failed-requests",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d51352b6748c632be53-ecd7b3f00312ac0120a1",
+              "file": "prod-readonly-compat.spec.js",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "login screen renders without console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7943,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T20:14:41.368Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "console-errors",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        },
+                        {
+                          "name": "failed-requests",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d51352b6748c632be53-5e3e70d4f484d301270f",
+              "file": "prod-readonly-compat.spec.js",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "login screen renders without console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2408,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T20:14:54.217Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "console-errors",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        },
+                        {
+                          "name": "failed-requests",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d51352b6748c632be53-c9de31490277e31a04dd",
+              "file": "prod-readonly-compat.spec.js",
+              "line": 9,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-25T20:14:33.462Z",
+    "duration": 23908.984,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,41 @@
+Options -Indexes
+RewriteEngine On
+RewriteBase /crm/
+
+# ── Block direct access to non-public files/directories ─────
+# (Apache's "!-f" fallback below only fires for paths that DON'T exist on
+# disk — files that DO exist, like database.sql or composer.json, were
+# being served as static files. This closes that off.)
+<FilesMatch "\.(sql|md|log|lock|sh)$">
+  Require all denied
+</FilesMatch>
+<Files "composer.json">
+  Require all denied
+</Files>
+RewriteRule ^(tests|scripts|vendor|includes)/ - [F,L]
+
+RewriteRule ^assets/(.*)$ assets/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L,QSA]
+
+# Allow DELETE and PUT methods
+<Limit GET POST PUT DELETE PATCH OPTIONS>
+  Order allow,deny
+  Allow from all
+</Limit>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Block sensitive files
+<FilesMatch "\.(sql|md|log|lock|sh)$">
+  Require all denied
+</FilesMatch>
+RewriteRule ^(tests|scripts|vendor|includes)/ - [F,L]

@@ -1,0 +1,191 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "dashboard": {
+                "checks": {
+                    "dashboard 200": {
+                        "name": "dashboard 200",
+                        "path": "::dashboard::dashboard 200",
+                        "id": "7b403610bf7102f5b30b73fe74121802",
+                        "passes": 662,
+                        "fails": 0
+                    }
+                },
+                "name": "dashboard",
+                "path": "::dashboard",
+                "id": "4127c5b4ec4d84d8d6603b3aae632e90",
+                "groups": {}
+            },
+            "contacts list": {
+                "groups": {},
+                "checks": {
+                        "contacts 200": {
+                            "fails": 0,
+                            "name": "contacts 200",
+                            "path": "::contacts list::contacts 200",
+                            "id": "fd42de33334eb49e9dc7e85754f9aa2b",
+                            "passes": 662
+                        }
+                    },
+                "name": "contacts list",
+                "path": "::contacts list",
+                "id": "f3d386157b2a80dad842cec8bde24fa0"
+            },
+            "invoices list": {
+                "name": "invoices list",
+                "path": "::invoices list",
+                "id": "487b972f103e5c6fdf363af49c6dc067",
+                "groups": {},
+                "checks": {
+                        "invoices 200": {
+                            "name": "invoices 200",
+                            "path": "::invoices list::invoices 200",
+                            "id": "f3f312c64a600ac82898bf967db66f10",
+                            "passes": 662,
+                            "fails": 0
+                        }
+                    }
+            },
+            "leases list": {
+                "name": "leases list",
+                "path": "::leases list",
+                "id": "0065511779b0b79bdec05d83bf56a37d",
+                "groups": {},
+                "checks": {
+                        "leases 200": {
+                            "path": "::leases list::leases 200",
+                            "id": "7d4d8f0401bba02fd1210cf2dc9ac2a3",
+                            "passes": 662,
+                            "fails": 0,
+                            "name": "leases 200"
+                        }
+                    }
+            }
+        },
+        "checks": {}
+    },
+    "metrics": {
+        "http_reqs": {
+            "count": 2649,
+            "rate": 111.54682479930605
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "checks": {
+            "fails": 0,
+            "passes": 2648,
+            "value": 1
+        },
+        "iteration_duration": {
+            "min": 22.858905,
+            "med": 282.612902,
+            "max": 1150.743301,
+            "p(90)": 432.85188400000004,
+            "p(95)": 524.11034485,
+            "avg": 287.3634131948642
+        },
+        "http_req_sending": {
+            "avg": 0.8347973087957722,
+            "min": 0.0155,
+            "med": 0.0644,
+            "max": 27.578927,
+            "p(90)": 2.0257692000000014,
+            "p(95)": 4.946962999999999
+        },
+        "http_req_blocked": {
+            "avg": 3.981771061910153,
+            "min": 0.083801,
+            "med": 0.361601,
+            "max": 85.327793,
+            "p(90)": 12.270037000000004,
+            "p(95)": 19.191207999999996
+        },
+        "http_req_connecting": {
+            "avg": 3.742006859947155,
+            "min": 0.0624,
+            "med": 0.278201,
+            "max": 83.852086,
+            "p(90)": 11.621733800000012,
+            "p(95)": 18.902346599999987
+        },
+        "vus": {
+            "value": 3,
+            "min": 0,
+            "max": 10
+        },
+        "iterations": {
+            "count": 662,
+            "rate": 27.876178941917935
+        },
+        "data_sent": {
+            "count": 545474,
+            "rate": 22969.3819216975
+        },
+        "data_received": {
+            "count": 3776028,
+            "rate": 159004.8825040672
+        },
+        "http_req_duration": {
+            "avg": 67.50924766968669,
+            "min": 2.14701,
+            "med": 46.277613,
+            "max": 798.976981,
+            "p(90)": 142.35471620000004,
+            "p(95)": 173.112858
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 67.50924766968669,
+            "min": 2.14701,
+            "med": 46.277613,
+            "max": 798.976981,
+            "p(90)": 142.35471620000004,
+            "p(95)": 173.112858
+        },
+        "http_req_receiving": {
+            "avg": 1.818158324273307,
+            "min": 0.043,
+            "med": 0.287501,
+            "max": 46.944117,
+            "p(90)": 4.716581800000005,
+            "p(95)": 9.322722999999996
+        },
+        "vus_max": {
+            "value": 10,
+            "min": 10,
+            "max": 10
+        },
+        "http_req_waiting": {
+            "avg": 64.85629203661769,
+            "min": 1.978509,
+            "med": 43.625701,
+            "max": 794.089858,
+            "p(90)": 139.2553018,
+            "p(95)": 170.27660519999998
+        },
+        "group_duration": {
+            "med": 50.6420335,
+            "max": 802.542497,
+            "p(90)": 147.368579,
+            "p(95)": 178.1952506000001,
+            "avg": 71.74859523678236,
+            "min": 2.413111
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 2649,
+            "value": 0
+        }
+    },
+    "setup_data": {
+        "cookie": "crm_session=4988f1840d9395cef729d4bab537c1fc6883d6cda83ed3a55ecd37557046f714aff7bcc73e887d611e2afe27874b286a"
+    }
+}

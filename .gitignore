@@ -1,0 +1,7 @@
+includes/config.php
+uploads/
+vendor/
+tests/results/
+*.log
+.DS_Store
+Thumbs.db

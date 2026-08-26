@@ -1,0 +1,191 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "dashboard": {
+                "checks": {
+                    "dashboard 200": {
+                        "name": "dashboard 200",
+                        "path": "::dashboard::dashboard 200",
+                        "id": "7b403610bf7102f5b30b73fe74121802",
+                        "passes": 11,
+                        "fails": 0
+                    }
+                },
+                "name": "dashboard",
+                "path": "::dashboard",
+                "id": "4127c5b4ec4d84d8d6603b3aae632e90",
+                "groups": {}
+            },
+            "contacts list": {
+                "name": "contacts list",
+                "path": "::contacts list",
+                "id": "f3d386157b2a80dad842cec8bde24fa0",
+                "groups": {},
+                "checks": {
+                        "contacts 200": {
+                            "name": "contacts 200",
+                            "path": "::contacts list::contacts 200",
+                            "id": "fd42de33334eb49e9dc7e85754f9aa2b",
+                            "passes": 11,
+                            "fails": 0
+                        }
+                    }
+            },
+            "invoices list": {
+                "path": "::invoices list",
+                "id": "487b972f103e5c6fdf363af49c6dc067",
+                "groups": {},
+                "checks": {
+                        "invoices 200": {
+                            "id": "f3f312c64a600ac82898bf967db66f10",
+                            "passes": 11,
+                            "fails": 0,
+                            "name": "invoices 200",
+                            "path": "::invoices list::invoices 200"
+                        }
+                    },
+                "name": "invoices list"
+            },
+            "leases list": {
+                "id": "0065511779b0b79bdec05d83bf56a37d",
+                "groups": {},
+                "checks": {
+                        "leases 200": {
+                            "passes": 11,
+                            "fails": 0,
+                            "name": "leases 200",
+                            "path": "::leases list::leases 200",
+                            "id": "7d4d8f0401bba02fd1210cf2dc9ac2a3"
+                        }
+                    },
+                "name": "leases list",
+                "path": "::leases list"
+            }
+        },
+        "checks": {}
+    },
+    "metrics": {
+        "data_received": {
+            "count": 97089248,
+            "rate": 4277423.422519273
+        },
+        "http_req_blocked": {
+            "avg": 1.365248822222222,
+            "min": 0.166801,
+            "med": 0.405503,
+            "max": 15.342625,
+            "p(90)": 2.9188436,
+            "p(95)": 4.577317199999995
+        },
+        "vus": {
+            "value": 1,
+            "min": 0,
+            "max": 1
+        },
+        "http_req_tls_handshaking": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0
+        },
+        "http_req_receiving": {
+            "avg": 9.621400155555554,
+            "min": 0.128201,
+            "med": 0.753306,
+            "max": 91.842546,
+            "p(90)": 33.540392000000004,
+            "p(95)": 45.56000839999997
+        },
+        "iteration_duration": {
+            "p(90)": 1969.381991,
+            "p(95)": 2253.774125,
+            "avg": 1714.654512909091,
+            "min": 1364.69925,
+            "med": 1702.168848,
+            "max": 2538.166259
+        },
+        "http_req_duration{expected_response:true}": {
+            "med": 416.414178,
+            "max": 1370.992251,
+            "p(90)": 833.3535296,
+            "p(95)": 910.2108615999999,
+            "avg": 435.75310966666655,
+            "min": 16.750535
+        },
+        "http_reqs": {
+            "count": 45,
+            "rate": 1.98254758357349
+        },
+        "http_req_duration": {
+            "avg": 435.75310966666655,
+            "min": 16.750535,
+            "med": 416.414178,
+            "max": 1370.992251,
+            "p(90)": 833.3535296,
+            "p(95)": 910.2108615999999
+        },
+        "http_req_sending": {
+            "avg": 0.09977635555555552,
+            "min": 0.032401,
+            "med": 0.0581,
+            "max": 1.380612,
+            "p(90)": 0.1374216,
+            "p(95)": 0.15628099999999995
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 45,
+            "value": 0
+        },
+        "http_req_connecting": {
+            "avg": 0.9064472888888889,
+            "min": 0.105301,
+            "med": 0.300302,
+            "max": 14.298516,
+            "p(90)": 1.9927762000000004,
+            "p(95)": 2.9001629999999983
+        },
+        "http_req_waiting": {
+            "p(95)": 875.5954358,
+            "avg": 426.03193315555546,
+            "min": 15.899528,
+            "med": 384.651921,
+            "max": 1370.78315,
+            "p(90)": 831.9923788
+        },
+        "iterations": {
+            "count": 11,
+            "rate": 0.48462274265129757
+        },
+        "vus_max": {
+            "max": 1,
+            "value": 1,
+            "min": 1
+        },
+        "group_duration": {
+            "p(90)": 834.2319202,
+            "p(95)": 913.0968978000001,
+            "avg": 428.62607334090904,
+            "min": 17.583542,
+            "med": 404.537533,
+            "max": 1371.599656
+        },
+        "checks": {
+            "passes": 44,
+            "fails": 0,
+            "value": 1
+        },
+        "data_sent": {
+            "count": 9254,
+            "rate": 407.69989640864617
+        }
+    },
+    "setup_data": {
+        "cookie": "crm_session=811403495356c7632d5e29ce07e86b5856b6101aa18fa5c0a1fd2b666054e1d41194d39444b987f56734739890737845"
+    }
+}

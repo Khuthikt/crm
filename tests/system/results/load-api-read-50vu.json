@@ -1,0 +1,191 @@
+{
+    "metrics": {
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "http_reqs": {
+            "count": 3085,
+            "rate": 129.8466173149617
+        },
+        "http_req_duration": {
+            "min": 3.002514,
+            "med": 315.424057,
+            "max": 1344.533914,
+            "p(90)": 464.865387,
+            "p(95)": 518.2699735999997,
+            "avg": 307.97496017115105
+        },
+        "data_received": {
+            "count": 4397655,
+            "rate": 185095.82686166218
+        },
+        "group_duration": {
+            "min": 3.607917,
+            "med": 321.805286,
+            "max": 1378.909474,
+            "p(90)": 468.78995710000004,
+            "p(95)": 523.2158330999999,
+            "avg": 316.5374624396888
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 307.97496017115105,
+            "min": 3.002514,
+            "med": 315.424057,
+            "max": 1344.533914,
+            "p(90)": 464.865387,
+            "p(95)": 518.2699735999997
+        },
+        "http_req_connecting": {
+            "avg": 7.553622407779553,
+            "min": 0.0578,
+            "med": 0.300001,
+            "max": 178.473324,
+            "p(90)": 22.183781999999994,
+            "p(95)": 43.96328279999997
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 3085,
+            "value": 0
+        },
+        "http_req_waiting": {
+            "max": 1290.603766,
+            "p(90)": 459.886264,
+            "p(95)": 513.5828341999999,
+            "avg": 300.44547406677543,
+            "min": 2.673013,
+            "med": 310.767935
+        },
+        "http_req_blocked": {
+            "min": 0.0834,
+            "med": 0.382302,
+            "max": 178.625625,
+            "p(90)": 23.968970399999936,
+            "p(95)": 45.21602859999988,
+            "avg": 8.045096570178242
+        },
+        "http_req_tls_handshaking": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_sending": {
+            "min": 0.0141,
+            "med": 0.0855,
+            "max": 127.498989,
+            "p(90)": 6.7689509999999995,
+            "p(95)": 18.298384799999987,
+            "avg": 2.9481385286871866
+        },
+        "iterations": {
+            "rate": 32.451131912426405,
+            "count": 771
+        },
+        "vus": {
+            "value": 27,
+            "min": 1,
+            "max": 50
+        },
+        "data_sent": {
+            "count": 635292,
+            "rate": 26739.227619856283
+        },
+        "http_req_receiving": {
+            "avg": 4.581347575688811,
+            "min": 0.0601,
+            "med": 0.428102,
+            "max": 132.949114,
+            "p(90)": 12.505617999999995,
+            "p(95)": 24.755593999999995
+        },
+        "checks": {
+            "passes": 3084,
+            "fails": 0,
+            "value": 1
+        },
+        "iteration_duration": {
+            "p(90)": 1609.913142,
+            "p(95)": 1697.1030425,
+            "avg": 1266.5720360181585,
+            "min": 27.463227,
+            "med": 1400.903978,
+            "max": 2744.064683
+        }
+    },
+    "setup_data": {
+        "cookie": "crm_session=14a127c9348b06e1c03bbe299cd3b1fe9ff08caac8a212075b84fcd6454cab75cdcc42eae98d5fc857f3aa5e18260e76"
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "dashboard": {
+                "name": "dashboard",
+                "path": "::dashboard",
+                "id": "4127c5b4ec4d84d8d6603b3aae632e90",
+                "groups": {},
+                "checks": {
+                        "dashboard 200": {
+                            "name": "dashboard 200",
+                            "path": "::dashboard::dashboard 200",
+                            "id": "7b403610bf7102f5b30b73fe74121802",
+                            "passes": 771,
+                            "fails": 0
+                        }
+                    }
+            },
+            "contacts list": {
+                "name": "contacts list",
+                "path": "::contacts list",
+                "id": "f3d386157b2a80dad842cec8bde24fa0",
+                "groups": {},
+                "checks": {
+                        "contacts 200": {
+                            "name": "contacts 200",
+                            "path": "::contacts list::contacts 200",
+                            "id": "fd42de33334eb49e9dc7e85754f9aa2b",
+                            "passes": 771,
+                            "fails": 0
+                        }
+                    }
+            },
+            "invoices list": {
+                "name": "invoices list",
+                "path": "::invoices list",
+                "id": "487b972f103e5c6fdf363af49c6dc067",
+                "groups": {},
+                "checks": {
+                        "invoices 200": {
+                            "name": "invoices 200",
+                            "path": "::invoices list::invoices 200",
+                            "id": "f3f312c64a600ac82898bf967db66f10",
+                            "passes": 771,
+                            "fails": 0
+                        }
+                    }
+            },
+            "leases list": {
+                "name": "leases list",
+                "path": "::leases list",
+                "id": "0065511779b0b79bdec05d83bf56a37d",
+                "groups": {},
+                "checks": {
+                        "leases 200": {
+                            "path": "::leases list::leases 200",
+                            "id": "7d4d8f0401bba02fd1210cf2dc9ac2a3",
+                            "passes": 771,
+                            "fails": 0,
+                            "name": "leases 200"
+                        }
+                    }
+            }
+        },
+        "checks": {}
+    }
+}

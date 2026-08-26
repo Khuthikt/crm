@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap/bootstrap.php"
+         colors="true"
+         stopOnFailure="false"
+         cacheResultFile=".phpunit.cache/test-results">
+    <testsuites>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="CRM_DB_HOST" value="localhost"/>
+        <env name="CRM_DB_NAME" value="crm_db_test"/>
+        <env name="CRM_DB_USER" value="crm_test_user"/>
+        <env name="CRM_DB_PASS" value="CrmTest_2026!"/>
+        <env name="CRM_BASE_URL" value="http://127.0.0.1:8199"/>
+    </php>
+</phpunit>
