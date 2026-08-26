@@ -10,17 +10,17 @@
 1. Clone repo to `/var/www/html/crm`
 2. Create database:
 ```sql
-CREATE DATABASE crm_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'crm_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL ON crm_db.* TO 'crm_user'@'localhost';
+CREATE DATABASE your_db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL ON your_db_name.* TO 'your_db_user'@'localhost';
 ```
-3. Import schema: `mysql -u crm_user -p crm_db < database.sql`
+3. Import schema: `mysql -u your_db_user -p your_db_name < database.sql`
 4. Copy config: `cp includes/config.example.php includes/config.php` and update DB credentials
 5. Set permissions: `chown -R www-data:www-data /var/www/html/crm/uploads`
 
 ## Seed Credentials (change immediately after first login)
-- Platform Admin: `hulisa.admin` / `Admin@2026x`
-- Tenant Admin:   `muga.admin`  / `Admin@2026x`
+- Platform Admin: `hulisa.admin` / `your_seed_password`
+- Tenant Admin:   `muga.admin`  / `your_seed_password`
 
 ## Cron Jobs
 
