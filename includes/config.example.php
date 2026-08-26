@@ -15,7 +15,7 @@ define('APP_ENV', 'production');
 define('DB_HOST',    getenv('CRM_DB_HOST') ?: 'localhost');
 define('DB_NAME',    getenv('CRM_DB_NAME') ?: 'crm_db');
 define('DB_USER',    getenv('CRM_DB_USER') ?: 'crm_user');       // Change to 'crm_user' on live server
-define('DB_PASS',    getenv('CRM_DB_PASS') ?: 'Hulisa@2025!');           // Change to your password on live server
+define('DB_PASS',    getenv('CRM_DB_PASS') ?: 'your_db_password');           // Change to your password on live server
 define('DB_CHARSET', 'utf8mb4');
 
 // ── APP ──────────────────────────────────────────────────────
