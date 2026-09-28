@@ -100,14 +100,38 @@ if ($method === 'GET' && !$id) {
         "SELECT t.*,
                 (SELECT COUNT(*) FROM users u WHERE u.tenant_id = t.id AND u.is_active = 1) AS user_count,
                 (SELECT COUNT(*) FROM contacts c WHERE c.tenant_id = t.id) AS contact_count,
-                (SELECT COUNT(*) FROM deals d WHERE d.tenant_id = t.id AND d.stage = 'closed') AS closed_deals
+                (SELECT COUNT(*) FROM deals d WHERE d.tenant_id = t.id AND d.stage = 'closed') AS closed_deals,
+                (SELECT COUNT(*) FROM invoices i WHERE i.tenant_id = t.id) AS invoice_count,
+                (SELECT COUNT(*) FROM invoices i WHERE i.tenant_id = t.id AND i.status = 'overdue') AS overdue_invoices,
+                (SELECT COUNT(*) FROM email_log e WHERE e.tenant_id = t.id) AS emails_sent,
+                (SELECT COUNT(*) FROM call_log cl WHERE cl.tenant_id = t.id) AS calls_logged,
+                (SELECT MAX(s.created_at) FROM sessions s WHERE s.tenant_id = t.id) AS last_activity,
+                (SELECT COUNT(*) FROM tenant_settings ts WHERE ts.tenant_id = t.id AND ts.setting_key = 'smtp_host' AND ts.setting_value != '') AS smtp_configured
            FROM tenants t
           ORDER BY t.created_at DESC"
     );
     Response::success($tenants);
 }
 
-if ($method === 'POST' && $action === '') {
+if ($method === 'PUT') {
+    $id = (int)($_GET['id'] ?? 0);
+    if (!$id) Response::error('Tenant ID required');
+    $body = $bodyData;
+    $allowed = ['billing_email','billing_contact','monthly_fee','billing_notes','status','plan'];
+    $sets = []; $params = [];
+    foreach ($body as $k => $v) {
+        if (!in_array($k, $allowed)) continue;
+        $sets[] = "$k = ?";
+        $params[] = $v;
+    }
+    if (empty($sets)) Response::error('Nothing to update');
+    $params[] = $id;
+    DB::execute("UPDATE tenants SET " . implode(', ', $sets) . " WHERE id = ?", $params);
+    Response::success(null, 'Tenant updated');
+    exit;
+}
+
+if ($method === 'POST' && $action === '' ) {
     // Create a new tenant + their first super admin
     $body = $bodyData;
 

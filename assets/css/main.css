@@ -351,18 +351,18 @@ tbody tr:hover { background: var(--bg); }
 
 /* ── TOAST NOTIFICATIONS ───────────────────────────────────── */
 #toast-container {
-  position: fixed; bottom: 20px; right: 20px;
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
   z-index: 9999; display: flex; flex-direction: column; gap: 8px;
 }
 .toast {
-  background: var(--text); color: #fff; padding: 12px 16px;
-  border-radius: var(--radius); font-size: 13px;
-  box-shadow: var(--shadow-lg); max-width: 300px;
+  background: var(--text); color: #fff; padding: 14px 24px;
+  border-radius: var(--radius); font-size: 14px; font-weight: 500;
+  box-shadow: var(--shadow-lg); max-width: 420px; min-width: 260px; text-align: center;
   animation: slideIn .2s ease;
 }
 .toast.success { background: var(--green); }
 .toast.error   { background: var(--red); }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 /* ── MISC UTILITIES ────────────────────────────────────────── */
 .hidden { display: none !important; }
@@ -432,164 +432,134 @@ tbody tr:hover { background: var(--bg); }
 .float-scroll-inner { height: 1px; }
 
 /* ── MOBILE RESPONSIVE ──────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE STYLES — single consolidated block
+   ═══════════════════════════════════════════════════════════ */
+
+
 @media (max-width: 768px) {
-  /* Sidebar */
-  .sidebar {
-    position: fixed;
-    left: -260px;
-    top: 0;
-    height: 100vh;
-    z-index: 500;
-    transition: left .2s;
-  }
-  .sidebar.open { left: 0; }
-  
-  /* Main content full width */
-  .main { margin-left: 0 !important; padding: 8px !important; }
-  
-  /* Topbar */
-  .topbar { flex-wrap: wrap; gap: 8px; padding: 12px 0; }
-  .topbar-actions { flex-wrap: wrap; gap: 4px; }
-  
-  /* Tables — horizontal scroll */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { min-width: 600px; }
-  
-  /* Cards full width */
-  .card { border-radius: 8px; }
-  
-  /* KPI grid — 2 cols on mobile */
-  [style*="grid-template-columns:repeat(4"] {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  [style*="grid-template-columns:repeat(3"] {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  
-  /* Estate layout stacks */
+
+  /* ── Layout ── */
+  body, .main { overflow-x: hidden !important; }
+  .page-content { padding: 8px !important; max-width: 100vw !important; }
+
+  /* ── Navigation ── */
+  .mobile-header { display: flex !important; }
+  .mobile-menu-btn { display: flex !important; }
+  .nav-overlay { display: none; position: fixed; top: 0; left: 260px; right: 0; bottom: 0; background: rgba(0,0,0,.5); z-index: 399; }
+  .nav-overlay.open { display: block; }
+
+  /* ── Topbar ── */
+  .topbar { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; padding: 10px 0 !important; }
+  .topbar-title { font-size: 15px !important; }
+  .topbar-actions { width: 100% !important; overflow-x: auto !important; flex-wrap: nowrap !important; padding-bottom: 4px !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .topbar-actions::-webkit-scrollbar { display: none; }
+  .topbar-actions .btn, .topbar-actions select, .topbar-actions .search-wrap { flex-shrink: 0 !important; }
+
+  /* ── KPI grid ── */
+  [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [style*="grid-template-columns:repeat(3"] { grid-template-columns: repeat(2, 1fr) !important; }
+  .kpi-value { font-size: 20px !important; }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto !important; max-width: 100% !important; -webkit-overflow-scrolling: touch; }
+
+  /* ── Estate layout ── */
   .estate-layout { flex-direction: column !important; }
-  .estate-sidebar { width: 100% !important; position: relative !important; max-height: 200px !important; }
-  
-  /* Modal full screen */
-  .modal { width: 95vw !important; max-width: 95vw !important; margin: 10px auto; }
-  
-  /* Forms */
+
+  /* ── Estate sidebar — single horizontal scrollable row ── */
+  .estate-sidebar {
+    width: 100% !important;
+    max-height: 160px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    background: var(--surface) !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .estate-sidebar::-webkit-scrollbar { display: none !important; }
+  .estate-sidebar-hdr { display: none !important; }
+  .estate-sidebar > div { display: contents !important; }
+  .estate-sidebar > div > div:first-child { display: none !important; }
+  .estate-item {
+    display: flex !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    border-radius: 20px !important;
+    border-bottom: none !important;
+    border-right: none !important;
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    min-width: unset !important;
+    width: auto !important;
+  }
+  .estate-item.active {
+    background: var(--accent) !important;
+    color: #fff !important;
+  }
+  .estate-main { width: 100% !important; border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important; }
+  #estate-mhdr { border-top: 1px solid var(--border) !important; }
+
+  /* ── Estate header ── */
+  .estate-mhdr { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+  .estate-mhdr .flex-gap { width: 100% !important; overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .estate-mhdr .flex-gap::-webkit-scrollbar { display: none; }
+  .estate-mhdr .flex-gap .btn, .estate-mhdr .flex-gap select, .estate-mhdr .flex-gap .search-wrap { flex-shrink: 0 !important; }
+
+  /* ── Invoice tabs ── */
+  .inv-subnav { white-space: nowrap !important; flex-shrink: 0 !important; }
+
+  /* ── Bulk bar ── */
+  #inv-bulk-bar { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; }
+  #inv-bulk-bar .btn { flex-shrink: 0 !important; }
+
+  /* ── Forms & Modals ── */
   .form-row-2 { grid-template-columns: 1fr !important; }
-  
-  /* Hide non-essential columns on mobile */
+  .modal { width: 95vw !important; max-width: 95vw !important; margin: 10px auto; }
+
+  /* ── Visibility ── */
   .desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
-  
-  /* Mobile nav toggle button */
-  .mobile-menu-btn { display: flex !important; }
-  
-  /* Font sizes */
-  .kpi-value { font-size: 20px !important; }
-  .topbar-title { font-size: 16px !important; }
+  .mobile-card-list { display: block !important; }
+  .desktop-table { display: none !important; }
+
+  /* ── Mobile cards ── */
+  .mobile-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .mobile-card-title { font-size: 14px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+  .mobile-card-sub { font-size: 12px; color: var(--text-3); margin-bottom: 8px; }
+  .mobile-card-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+  /* ── Notifications ── */
+  #notif-panel { width: 100vw !important; right: 0 !important; }
 }
 
 @media (max-width: 480px) {
-  [style*="grid-template-columns:repeat(4"] {
-    grid-template-columns: 1fr 1fr !important;
-  }
+  [style*="grid-template-columns:repeat(4"] { grid-template-columns: 1fr 1fr !important; }
   .btn { padding: 6px 10px !important; font-size: 12px !important; }
 }
 
-@media (max-width: 768px) {
-  .mobile-header { display: flex !important; }
-  .nav-overlay { display: none; position: fixed; top: 0; left: 260px; right: 0; bottom: 0; background: rgba(0,0,0,.5); z-index: 399; }
-  .nav-overlay.open { display: block; }
+@media (max-width: 380px) {
+  .topbar-title { font-size: 14px !important; }
+  .kpi-value { font-size: 18px !important; }
 }
 
-/* Mobile card views */
 @media (max-width: 768px) {
-  /* Hide table on mobile, show cards */
-  .mobile-card-list { display: block !important; }
-  .desktop-table { display: none !important; }
-  
-  .mobile-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-  .mobile-card-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--blue);
-    margin-bottom: 4px;
-  }
-  .mobile-card-sub {
-    font-size: 12px;
-    color: var(--text-3);
-    margin-bottom: 8px;
-  }
-  .mobile-card-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .mobile-card-row:last-child { border-bottom: none; }
-  .mobile-card-label { color: var(--text-3); }
-  .mobile-card-value { font-weight: 500; }
-  .mobile-card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
+  /* My Work — fix card alignment and table scroll */
+  #mywork-content .card { margin-left: 0 !important; width: 100% !important; box-sizing: border-box !important; }
+  #mywork-content .table-wrap { overflow-x: auto !important; }
+  #mywork-content table { min-width: 600px !important; }
+  #mywork-content .card-header { flex-wrap: wrap !important; gap: 6px !important; }
+  #mywork-content .card-header .flex-gap { flex-wrap: nowrap !important; overflow-x: auto !important; }
 }
 
-/* Mobile specific fixes */
 @media (max-width: 768px) {
-  /* Notifications panel full width on mobile */
-  #notif-panel {
-    width: 100vw !important;
-    right: 0 !important;
-  }
-  
-  /* Close nav when notifications open */
-  /* Estate layout stack on mobile */
-  .estate-layout {
-    flex-direction: column !important;
-  }
-  .estate-sidebar {
-    width: 100% !important;
-    position: relative !important;
-    top: 0 !important;
-    max-height: 150px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    display: flex !important;
-    flex-direction: row !important;
-  }
-  .estate-sidebar-hdr { display: none !important; }
-  .estate-item {
-    flex-direction: column !important;
-    padding: 8px 12px !important;
-    min-width: 100px !important;
-    text-align: center !important;
-    border-bottom: none !important;
-    border-right: 1px solid var(--border) !important;
-  }
-  .estate-main { width: 100% !important; }
-  
-  /* Topbar wrap properly */
-  .topbar { flex-direction: column !important; align-items: flex-start !important; }
-  .topbar-actions { width: 100%; overflow-x: auto; }
-  
-  /* Sort + search row */
-  .search-wrap { min-width: 140px !important; }
-}
-
-/* Contacts table scroll */
-#contacts-view .table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-#contacts-view table {
-  min-width: 900px;
+  /* Table headers — remove sticky on mobile so they scroll with table */
+  .table-wrap thead tr,
+  .estate-mbody thead tr,
+  #estate-mbody thead tr { position: relative !important; top: auto !important; }
+  .table-wrap thead,
+  .estate-mbody thead,
+  #estate-mbody thead { position: relative !important; top: auto !important; }
 }

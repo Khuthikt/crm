@@ -59,6 +59,23 @@ if (!file_exists($output) || filesize($output) === 0) {
 }
 
 $filename = ($type === 'landlord' ? 'Landlord' : 'Debtor') . '_Statement_' . $lease['ref'] . '.pdf';
+
+// Log statement download
+$userId = (int)($user['user_id'] ?? $user['id']);
+$period = date('Y-m');
+$existing = DB::queryOne(
+    'SELECT id FROM statement_log WHERE lease_id = ? AND tenant_id = ? AND period = ?',
+    [$leaseId, $tenantId, $period]
+);
+if ($existing) {
+    DB::execute('UPDATE statement_log SET downloaded_at = NOW() WHERE id = ?', [$existing['id']]);
+} else {
+    DB::insert(
+        'INSERT INTO statement_log (tenant_id, lease_id, generated_by, downloaded_at, period) VALUES (?,?,?,NOW(),?)',
+        [$tenantId, $leaseId, $userId, $period]
+    );
+}
+
 header('Content-Type: application/pdf');
 header('Content-Disposition: inline; filename="' . $filename . '"');
 header('Content-Length: ' . filesize($output));

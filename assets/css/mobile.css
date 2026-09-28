@@ -53,9 +53,16 @@
   /* Pipeline: single column */
   .pipeline { grid-template-columns: 1fr; gap: 10px; }
 
-  /* Tables: scroll horizontally */
-  .table-wrap { border-radius: var(--radius); overflow: hidden; }
-  table { min-width: 500px; }
+  /* Tables: scroll horizontally with visible scrollbar */
+  .table-wrap {
+    border-radius: var(--radius);
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-wrap::-webkit-scrollbar { height: 6px; }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  table { min-width: 600px; }
 
   /* Forms: single column */
   .form-row-2 { grid-template-columns: 1fr; }
@@ -77,7 +84,7 @@
   .modal-footer .btn { width: 100%; justify-content: center; }
 
   /* Toast: full width on mobile */
-  #toast-container { left: 16px; right: 16px; bottom: 16px; }
+  #toast-container { left: 16px; right: 16px; top: 16px; bottom: auto; transform: none; }
   .toast { max-width: 100%; }
 
   /* Nav items: larger tap target */
@@ -94,6 +101,34 @@
   .mobile-card-name  { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
   .mobile-card-meta  { font-size: 12px; color: var(--text-3); }
   .mobile-card-row   { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+
+  /* Estate layout: stack on mobile */
+  .estate-layout { flex-direction: column; }
+  .estate-sidebar {
+    width: 100%;
+    position: static;
+    max-height: 200px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .estate-main {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+
+
+
+  /* Notifications panel: full width on mobile */
+  #notifications-panel {
+    width: 100vw !important;
+    right: 0 !important;
+    left: 0 !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
 
   /* Hide desktop table on mobile, show cards */
   .desktop-only { display: none !important; }

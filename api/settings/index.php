@@ -4,9 +4,12 @@ ini_set('display_errors', 0);
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/response.php';
+require_once __DIR__ . '/../../includes/crypto.php';
 
 $user = Auth::user();
 if (!$user) Response::unauthorized();
+// Platform admin has no tenant settings
+if ($user['role'] === 'platform_superadmin') Response::success([]);
 $tenantId = (int)$user['tenant_id'];
 if (!$tenantId) Response::error('No tenant assigned');
 
@@ -84,12 +87,13 @@ if ($method === 'POST') {
                     );
                 }
             }
-            // Only save password if provided
+            // Only save password if provided — encrypt before storing
             if (!empty($data['smtp_pass'])) {
+                $encryptedPass = Crypto::encrypt($data['smtp_pass']);
                 DB::execute(
                     'INSERT INTO tenant_settings (tenant_id, setting_key, setting_value)
                      VALUES (?,?,?) ON DUPLICATE KEY UPDATE setting_value = ?',
-                    [$tenantId, 'smtp_pass', $data['smtp_pass'], $data['smtp_pass']]
+                    [$tenantId, 'smtp_pass', $encryptedPass, $encryptedPass]
                 );
             }
             Response::success(null, 'SMTP settings saved');

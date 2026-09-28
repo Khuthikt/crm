@@ -24,7 +24,9 @@ switch ($method) {
         }
         // Admins can only see their own tenant's users
         $rows = DB::query(
-            "SELECT id, name, email, username, role, avatar_url, is_active, last_login, created_at
+            "SELECT id, name, email, username, role, avatar_url, is_active, status,
+                    smtp_host, smtp_port, smtp_user, smtp_encryption, smtp_from_name, email_signature, email_signature_img,
+                    last_login, created_at
                FROM users WHERE tenant_id = ? ORDER BY name ASC",
             [$tenantId]
         );
@@ -54,8 +56,8 @@ switch ($method) {
 
         // Check unique
         $exists = DB::queryOne(
-            'SELECT id FROM users WHERE email = ? OR username = ?',
-            [$body['email'], $body['username']]
+            'SELECT id FROM users WHERE (email = ? OR username = ?) AND tenant_id = ?',
+            [$body['email'], $body['username'], $tenantId]
         );
         if ($exists) Response::error('Email or username already exists');
 
@@ -63,9 +65,17 @@ switch ($method) {
             Response::error('Password must be at least 8 characters');
         }
 
+        // Encrypt SMTP password if provided
+        $smtpPass = '';
+        if (!empty($body['smtp_pass'])) {
+            require_once __DIR__ . '/../../includes/crypto.php';
+            $smtpPass = Crypto::encrypt($body['smtp_pass']);
+        }
+
         $newId = DB::insert(
-            'INSERT INTO users (tenant_id, name, email, username, password_hash, role, is_active)
-             VALUES (?,?,?,?,?,?,1)',
+            'INSERT INTO users (tenant_id, name, email, username, password_hash, role, is_active,
+                smtp_host, smtp_port, smtp_user, smtp_pass, smtp_encryption, smtp_from_name)
+             VALUES (?,?,?,?,?,?,1,?,?,?,?,?,?)',
             [
                 $tenantId,
                 trim($body['name']),
@@ -73,6 +83,12 @@ switch ($method) {
                 strtolower(trim($body['username'])),
                 password_hash($body['password'], PASSWORD_BCRYPT, ['cost' => 12]),
                 $body['role'],
+                $body['smtp_host'] ?? null,
+                $body['smtp_port'] ?? null,
+                $body['smtp_user'] ?? null,
+                $smtpPass ?: null,
+                $body['smtp_encryption'] ?? null,
+                $body['smtp_from_name'] ?? null,
             ]
         );
 
@@ -125,14 +141,30 @@ switch ($method) {
             $passwordHash = password_hash($body['password'], PASSWORD_BCRYPT, ['cost' => 12]);
         }
 
+        // Encrypt SMTP password if provided
+        $smtpPass = $target['smtp_pass'];
+        if (!empty($body['smtp_pass'])) {
+            require_once __DIR__ . '/../../includes/crypto.php';
+            $smtpPass = Crypto::encrypt($body['smtp_pass']);
+        }
+
         DB::execute(
-            'UPDATE users SET name=?, email=?, role=?, is_active=?, password_hash=? WHERE id = ? AND tenant_id = ?',
+            'UPDATE users SET name=?, email=?, role=?, is_active=?, status=?, password_hash=?,
+                smtp_host=?, smtp_port=?, smtp_user=?, smtp_pass=?, smtp_encryption=?, smtp_from_name=?
+             WHERE id = ? AND tenant_id = ?',
             [
                 $body['name']      ?? $target['name'],
                 $body['email']     ?? $target['email'],
                 $body['role']      ?? $target['role'],
                 isset($body['is_active']) ? (int)$body['is_active'] : $target['is_active'],
+                $body['status']    ?? $target['status'] ?? 'active',
                 $passwordHash,
+                $body['smtp_host']       ?? $target['smtp_host'],
+                $body['smtp_port']       ?? $target['smtp_port'],
+                $body['smtp_user']       ?? $target['smtp_user'],
+                $smtpPass,
+                $body['smtp_encryption'] ?? $target['smtp_encryption'],
+                $body['smtp_from_name']  ?? $target['smtp_from_name'],
                 $id, $tenantId,
             ]
         );
@@ -153,9 +185,8 @@ switch ($method) {
         );
         if (!$target) Response::notFound();
 
-        // Soft delete — deactivate instead
-        DB::execute('UPDATE users SET is_active = 0 WHERE id = ?', [$id]);
-        Response::success(null, 'User deactivated');
+        DB::execute('DELETE FROM users WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+        Response::success(null, 'User deleted');
         break;
 
     default:

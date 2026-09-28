@@ -118,11 +118,17 @@ story.append(details_tbl)
 story.append(Spacer(1, 6*mm))
 
 # ── BILL TO ───────────────────────────────────────────────────
-tenant_name  = inv.get('tenant_name') or inv.get('lease_tenant_name') or '—'
-tenant_email = inv.get('tenant_email') or ''
-tenant_phone = inv.get('tenant_phone') or ''
+tenant_name  = inv.get('tenant_name') or inv.get('tenant_contact_name') or inv.get('lease_tenant_name') or '—'
+tenant_email = inv.get('tenant_email') or inv.get('tenant_contact_email') or ''
+tenant_phone = inv.get('tenant_phone') or inv.get('tenant_contact_phone') or ''
 tenant_addr  = inv.get('tenant_address') or ''
 tenant_city  = inv.get('tenant_city') or ''
+# Clean up None strings from PHP
+tenant_name  = '' if tenant_name == 'None' else tenant_name
+tenant_email = '' if tenant_email == 'None' else tenant_email
+tenant_phone = '' if tenant_phone == 'None' else tenant_phone
+tenant_addr  = '' if tenant_addr == 'None' else tenant_addr
+tenant_city  = '' if tenant_city == 'None' else tenant_city
 property_str = inv.get('property','')
 unit_str     = inv.get('unit','')
 if unit_str: property_str += f' · Unit {unit_str}'

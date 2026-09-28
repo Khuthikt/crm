@@ -34,7 +34,7 @@ foreach ($schedules as $sched) {
 
     $invId = DB::insert(
         'INSERT INTO invoices (tenant_id, lease_id, ref, invoice_type, subtotal, vat_applied, vat_amount, total, due_date, status, notes, created_by)
-         VALUES (?,?,?,?,?,?,?,?,?,'unpaid',?,1)',
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,1)',
         [
             $sched['tenant_id'],
             $sched['lease_id'],
@@ -45,6 +45,7 @@ foreach ($schedules as $sched) {
             $vat,
             $total,
             $dueDate,
+            'unpaid',
             'Auto-generated from schedule',
         ]
     );

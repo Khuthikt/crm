@@ -60,10 +60,13 @@ if ($method === 'POST' && ($_GET['action'] ?? '') === 'import') {
     $mapType    = $_POST['map_type']    ?? '';
     $defaultType = $_POST['default_type'] ?? 'Lead';
     $estateName  = trim($_POST['estate_name'] ?? '');
-    $mapErf      = $_POST['map_erf']   ?? '';
-    $mapUnit     = $_POST['map_unit']  ?? '';
-    $mapSize     = $_POST['map_size']  ?? '';
-    $limitRows  = isset($_POST['limit']) ? (int)$_POST['limit'] : 0;
+    $mapErf      = $_POST['map_erf']     ?? '';
+    $mapUnit     = $_POST['map_unit']    ?? '';
+    $mapSize     = $_POST['map_size']    ?? '';
+    $mapComplex  = $_POST['map_complex'] ?? '';
+    $mapSuburb   = $_POST['map_suburb']  ?? '';
+    $suburbName  = trim($_POST['suburb_name'] ?? '');
+    $limitRows   = isset($_POST['limit']) ? (int)$_POST['limit'] : 0;
 
     if (!$mapName) Response::error('Name column mapping is required');
 
@@ -104,18 +107,24 @@ if ($method === 'POST' && ($_GET['action'] ?? '') === 'import') {
             $erf     = ($erf  === 'NaN' || $erf  === '') ? null : $erf;
             $unit    = ($unit === 'NaN' || $unit === '0') ? null : $unit;
             $size    = ($size === 'NaN' || $size === '') ? null : $size;
+            // Complex: use column value if mapped, else fall back to manual estate name
+            $complex = $mapComplex ? trim($row[$mapComplex] ?? '') : $estateName;
+            $complex = ($complex === 'NaN' || $complex === '') ? ($estateName ?: null) : $complex;
+            // Suburb: use column value if mapped, else fall back to manual suburb name
+            $suburb  = $mapSuburb ? trim($row[$mapSuburb] ?? '') : $suburbName;
+            $suburb  = ($suburb === 'NaN' || $suburb === '') ? ($suburbName ?: null) : $suburb;
 
             try {
                 DB::execute(
                     'INSERT INTO contacts
                      (tenant_id, name, phone, email, id_number, type,
                       source, status, fica_status, created_by,
-                      complex, unit, erf, size)
-                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                      complex, suburb, unit, erf, size)
+                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     [
                         $tenantId, $name, $phone, $email, $idNum,
                         $type, 'Import', 'active', 'pending', $userId,
-                        $estateName ?: null, $unit, $erf, $size,
+                        $complex, $suburb, $unit, $erf, $size,
                     ]
                 );
                 $imported++;

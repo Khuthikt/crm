@@ -1,0 +1,13 @@
+Options -Indexes
+
+# Allow image and document files to be served directly
+<FilesMatch "\.(jpg|jpeg|png|webp|gif|pdf|doc|docx)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
+# Block everything else
+<FilesMatch "\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

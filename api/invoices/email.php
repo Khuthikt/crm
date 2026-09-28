@@ -19,7 +19,7 @@ $inv   = DB::queryOne('SELECT * FROM invoices WHERE id = ? AND tenant_id = ?', [
 if (!$inv) Response::notFound('Invoice not found');
 
 $lines   = DB::query('SELECT * FROM invoice_lines WHERE invoice_id = ?', [$invoiceId]);
-$settings = Mailer::getSettings($tenantId);
+$settings = Mailer::getEffectiveSettings($tenantId, $userId ?? null);
 $banks    = json_decode($settings['bank_accounts'] ?? '[]', true) ?: [];
 $compName = $settings['company_name'] ?? 'Property Management';
 
@@ -53,7 +53,19 @@ if (!empty($banks)) {
     Account: <strong>{$b['bank_account']}</strong><br>
     Reference: <strong>{$inv['ref']}</strong></p>";
 }
-$content .= "<p>Thank you for your business.</p><p>Regards,<br><strong>{$compName}</strong></p>";
+$content .= "<p>Thank you for your business.</p>";
+
+// Add signature
+$sigText = !empty($settings['email_signature']) ? $settings['email_signature'] : '';
+$sigImg  = !empty($settings['email_signature_img']) ? $settings['email_signature_img'] : '';
+if ($sigText || $sigImg) {
+    $content .= '<div style="margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb">';
+    if ($sigText) $content .= '<div style="font-size:13px;color:#444;line-height:1.6;white-space:pre-line">' . htmlspecialchars($sigText) . '</div>';
+    if ($sigImg)  $content .= '<img src="' . htmlspecialchars($sigImg) . '" style="max-height:80px;max-width:300px;object-fit:contain;margin-top:12px;display:block">';
+    $content .= '</div>';
+} else {
+    $content .= "<p>Regards,<br><strong>{$compName}</strong></p>";
+}
 
 $logoUrl = $settings['logo_url'] ?? '';
 $html = Mailer::htmlWrap($content, $compName, $logoUrl);
@@ -62,6 +74,11 @@ $sent = Mailer::send($settings, $to, $toName, $subject, $html, $pdfPath, "Invoic
 unlink($pdfPath);
 
 if ($sent) {
+    // Track email sent
+    DB::execute(
+        'UPDATE invoices SET emailed_at = NOW(), emailed_to = ? WHERE id = ?',
+        [$to, $invoiceId]
+    );
     Response::success(null, 'Invoice emailed to ' . $to);
 } else {
     Response::error('Failed to send email. Check SMTP settings in Settings.');

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/maintenance.php';
 require_once __DIR__ . '/config.php';
 
 class Auth {
@@ -16,6 +17,11 @@ class Auth {
               WHERE s.token = ? AND s.expires_at > NOW() AND u.is_active = 1',
             [$token]
         );
+        if ($session) {
+            // Refresh session expiry on every request (sliding window)
+            $newExpiry = date('Y-m-d H:i:s', time() + SESSION_LIFETIME);
+            DB::execute('UPDATE sessions SET expires_at = ? WHERE token = ?', [$newExpiry, $token]);
+        }
         return $session ?: null;
     }
 
@@ -37,6 +43,20 @@ class Auth {
     }
 
     // ── Attempt login ───────────────────────────────────────────
+    public static function auditLog(int $userId = null, int $tenantId = null, string $action = '', string $entityType = null, int $entityId = null, string $description = null): void {
+        try {
+            $userName = null;
+            if ($userId) {
+                $u = DB::queryOne('SELECT name FROM users WHERE id = ?', [$userId]);
+                $userName = $u['name'] ?? null;
+            }
+            DB::execute(
+                'INSERT INTO audit_log (tenant_id, user_id, user_name, action, entity_type, entity_id, description, ip_address) VALUES (?,?,?,?,?,?,?,?)',
+                [$tenantId, $userId, $userName, $action, $entityType, $entityId, $description, $_SERVER['REMOTE_ADDR'] ?? null]
+            );
+        } catch (\Exception $e) { /* silent */ }
+    }
+
     public static function login(string $username, string $password): array {
         $user = DB::queryOne(
             'SELECT u.*, t.name AS tenant_name, t.status AS tenant_status
@@ -55,8 +75,14 @@ class Auth {
             return ['ok' => false, 'error' => 'Your account is suspended. Contact support.'];
         }
 
+        // Check user is not suspended
+        if (($user['status'] ?? 'active') === 'suspended') {
+            return ['ok' => false, 'error' => 'Your account has been suspended. Please contact your administrator.'];
+        }
+
         // Log successful login
-        DB::execute("INSERT INTO login_attempts (username, ip, success) VALUES (?,?,1)", [$username, $ip]);
+        DB::execute("INSERT INTO login_attempts (username, ip, success) VALUES (?,?,1)", [$username, $ip ?? null]);
+        self::auditLog($user['id'], $user['tenant_id'] ?? null, 'login', 'user', $user['id'], "User logged in: {$user['name']}");
         // Create session
         $token = bin2hex(random_bytes(48));
         $expires = date('Y-m-d H:i:s', time() + SESSION_LIFETIME);

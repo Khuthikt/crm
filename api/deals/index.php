@@ -32,9 +32,11 @@ switch ($method) {
         // Agent restriction
         $agentFilter = ($user['role'] === 'agent') ? ' AND d.assigned_to = ' . $user['user_id'] ?? $user['id'] : '';
         $stage       = $_GET['stage'] ?? '';
+        $contactId   = isset($_GET['contact_id']) && $_GET['contact_id'] !== '' ? (int)$_GET['contact_id'] : null;
         $params      = [$tenantId];
         $stageWhere  = '';
-        if ($stage) { $stageWhere = ' AND d.stage = ?'; $params[] = $stage; }
+        if ($stage)     { $stageWhere .= ' AND d.stage = ?';      $params[] = $stage; }
+        if ($contactId) { $stageWhere .= ' AND d.contact_id = ?'; $params[] = $contactId; }
 
         $rows = DB::query(
             "SELECT d.*, c.name AS contact_name, l.title AS listing_title, u.name AS agent_name

@@ -1,5 +1,12 @@
 <?php
+set_error_handler(function($no,$str,$file,$line){ file_put_contents('/var/www/html/crm/uploads/upload_debug.log', "PHP ERROR: $str in $file:$line" . PHP_EOL, FILE_APPEND); });
+register_shutdown_function(function(){ $e = error_get_last(); if ($e) { file_put_contents('/var/www/html/crm/uploads/upload_debug.log', 'FATAL: ' . print_r($e, true) . PHP_EOL, FILE_APPEND); } });
+try {
 require_once __DIR__ . '/../../includes/auth.php';
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/tmp/upload_debug.log');
+error_reporting(E_ALL);
 require_once __DIR__ . '/../../includes/db.php';
 require_once __DIR__ . '/../../includes/response.php';
 require_once __DIR__ . '/../../includes/config.php';
@@ -77,7 +84,7 @@ switch ($type) {
              (tenant_id, contact_id, doc_type, file_name, file_url, file_size, mime_type, uploaded_by)
              VALUES (?,?,?,?,?,?,?,?)',
             [$tenantId, $entityId, $docType, $file['name'], $fileUrl,
-             $file['size'], $mimeType, $user['id']]
+             $file['size'], $mimeType, ($user['user_id'] ?? $user['id'])]
         );
 
         // Update FICA status
@@ -99,7 +106,7 @@ switch ($type) {
             'INSERT INTO activity_log
              (tenant_id, user_id, entity_type, entity_id, action, description)
              VALUES (?,?,?,?,?,?)',
-            [$tenantId, $user['id'], 'contact', $entityId,
+            [$tenantId, ($user['user_id'] ?? $user['id']), 'contact', $entityId,
              'document_uploaded', "$docType uploaded: {$file['name']}"]
         );
 
@@ -128,7 +135,7 @@ switch ($type) {
             'INSERT INTO listing_photos
              (tenant_id, listing_id, file_url, is_primary, uploaded_by)
              VALUES (?,?,?,?,?)',
-            [$tenantId, $entityId, $fileUrl, ($existing === 0) ? 1 : 0, $user['id']]
+            [$tenantId, $entityId, $fileUrl, ($existing === 0) ? 1 : 0, ($user['user_id'] ?? $user['id'])]
         );
 
         Response::success(['id' => $photoId, 'url' => $fileUrl], 'Photo uploaded');
@@ -155,14 +162,14 @@ switch ($type) {
              (tenant_id, contact_id, doc_type, file_name, file_url, file_size, mime_type, uploaded_by, entity_type, entity_id)
              VALUES (?,?,?,?,?,?,?,?,?,?)',
             [$tenantId, null, $docType ?: 'Lease Agreement', $file['name'], $fileUrl,
-             $file['size'], $mimeType, $user['user_id'] ?? $user['id'], 'lease', $entityId]
+             $file['size'], $mimeType, $user['user_id'] ?? ($user['user_id'] ?? $user['id']), 'lease', $entityId]
         );
 
         DB::execute(
             'INSERT INTO activity_log
              (tenant_id, user_id, entity_type, entity_id, action, description)
              VALUES (?,?,?,?,?,?)',
-            [$tenantId, $user['id'], 'lease', $entityId,
+            [$tenantId, ($user['user_id'] ?? $user['id']), 'lease', $entityId,
              'document_uploaded', "Lease document uploaded: {$file['name']}"]
         );
 
@@ -188,6 +195,33 @@ switch ($type) {
         Response::success(['url' => $fileUrl, 'id' => $photoId], 'Photo uploaded');
         break;
 
+    case 'ticket_screenshot':
+    case 'kb_document':
+        // Just store the file, return URL
+        Response::success(['url' => $fileUrl], 'File uploaded');
+        break;
+
+    case 'signature':
+        // Save signature image URL to tenant settings
+        DB::execute(
+            'INSERT INTO tenant_settings (tenant_id, setting_key, setting_value)
+             VALUES (?, "email_signature_img", ?)
+             ON DUPLICATE KEY UPDATE setting_value = ?',
+            [$tenantId, $fileUrl, $fileUrl]
+        );
+        Response::success(['url' => $fileUrl], 'Signature image uploaded');
+        break;
+
+    case 'user_signature':
+        // Save signature image URL to user record
+        $targetUserId = (int)($_POST['user_id'] ?? $userId);
+        DB::execute(
+            'UPDATE users SET email_signature_img = ? WHERE id = ? AND tenant_id = ?',
+            [$fileUrl, $targetUserId, $tenantId]
+        );
+        Response::success(['url' => $fileUrl], 'User signature image uploaded');
+        break;
+
     case 'logo':
         // Save logo URL to tenant settings
         DB::execute(
@@ -197,6 +231,16 @@ switch ($type) {
             [$tenantId, $fileUrl]
         );
         Response::success(['url' => $fileUrl], 'Logo uploaded');
+        break;
+    case 'hulisa_logo':
+        // Save Hulisa platform logo to platform settings
+        DB::execute(
+            "INSERT INTO platform_settings (setting_key, setting_value)
+             VALUES ('hulisa_logo_url', ?)
+             ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)",
+            [$fileUrl]
+        );
+        Response::success(['url' => $fileUrl], 'Hulisa logo uploaded');
         break;
 
     case 'lease_doc':
@@ -212,11 +256,17 @@ switch ($type) {
              VALUES (?,?,?,?,?,?,?,?,?,?)',
             [$tenantId, $entityType === 'contact' ? $entityId : null,
              $docType ?: 'Document', $file['name'], $fileUrl,
-             $file['size'], $mimeType, $user['id'], $entityType, $entityId]
+             $file['size'], $mimeType, ($user['user_id'] ?? $user['id']), $entityType, $entityId]
         );
         Response::success(['url' => $fileUrl, 'doc_type' => $docType], 'Document uploaded');
         break;
 
     default:
         Response::error('Unknown upload type');
+}
+
+} catch (\Throwable $e) {
+    file_put_contents('/var/www/html/crm/uploads/upload_debug.log', 'EXCEPTION: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . PHP_EOL, FILE_APPEND);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Server error - check logs']);
 }

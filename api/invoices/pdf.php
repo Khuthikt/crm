@@ -54,6 +54,9 @@ if (!file_exists($output) || filesize($output) === 0) {
     Response::error('PDF generation failed: ' . $result, 500);
 }
 
+// Track download
+DB::execute('UPDATE invoices SET downloaded_at = NOW() WHERE id = ?', [$id]);
+
 // Stream PDF
 header('Content-Type: application/pdf');
 header('Content-Disposition: inline; filename="Invoice-' . $inv['ref'] . '.pdf"');

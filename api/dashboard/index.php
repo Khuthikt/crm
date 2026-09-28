@@ -59,15 +59,22 @@ $pipeline = DB::query(
 
 // ── Agent leaderboard ───────────────────────────────────────
 $leaderboard = DB::query(
-    "SELECT u.name, COUNT(*) AS deals_closed, COALESCE(SUM(d.value),0) AS total_value
-       FROM deals d
-       JOIN users u ON u.id = d.assigned_to
-      WHERE d.tenant_id = ? AND d.stage = 'closed'
-        AND YEAR(d.actual_close) = YEAR(CURDATE())
-      GROUP BY d.assigned_to, u.name
-      ORDER BY total_value DESC
+    "SELECT u.name,
+            COUNT(d.id) AS deals_closed,
+            COALESCE(SUM(d.value),0) AS total_value,
+            COALESCE(SUM(d.commission_amt),0) AS total_commission
+       FROM users u
+  LEFT JOIN deals d ON d.assigned_to = u.id
+                   AND d.stage = 'closed'
+                   AND d.tenant_id = ?
+                   AND YEAR(d.actual_close) = YEAR(CURDATE())
+      WHERE u.tenant_id = ?
+        AND u.role IN ('agent','admin','super_admin')
+        AND u.is_active = 1
+      GROUP BY u.id, u.name
+      ORDER BY total_value DESC, deals_closed DESC
       LIMIT 10",
-    [$tenantId]
+    [$tenantId, $tenantId]
 );
 
 // ── Recent activity ─────────────────────────────────────────

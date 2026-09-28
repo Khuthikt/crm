@@ -2,25 +2,29 @@ Options -Indexes
 RewriteEngine On
 RewriteBase /crm/
 
-# ── Block direct access to non-public files/directories ─────
-# (Apache's "!-f" fallback below only fires for paths that DON'T exist on
-# disk — files that DO exist, like database.sql or composer.json, were
-# being served as static files. This closes that off.)
-<FilesMatch "\.(sql|md|log|lock|sh)$">
+# Block sensitive files
+<FilesMatch "\.(sql|md|log|lock|sh|key)$">
   Require all denied
 </FilesMatch>
+<Files ".encryption_key">
+  Require all denied
+</Files>
 <Files "composer.json">
   Require all denied
 </Files>
+
+# Block direct access to sensitive directories
 RewriteRule ^(tests|scripts|vendor|includes)/ - [F,L]
 
+# Allow assets directly
 RewriteRule ^assets/(.*)$ assets/$1 [L]
 
+# Route everything else through index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php [L,QSA]
 
-# Allow DELETE and PUT methods
+# Allow all HTTP methods
 <Limit GET POST PUT DELETE PATCH OPTIONS>
   Order allow,deny
   Allow from all
@@ -33,9 +37,3 @@ RewriteRule . index.php [L,QSA]
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
-
-# Block sensitive files
-<FilesMatch "\.(sql|md|log|lock|sh)$">
-  Require all denied
-</FilesMatch>
-RewriteRule ^(tests|scripts|vendor|includes)/ - [F,L]

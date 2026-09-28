@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test Documentation</title>
+        <style>
+            body {
+                text-rendering: optimizeLegibility;
+                font-family: Source SansSerif Pro, Arial, sans-serif;
+                font-variant-ligatures: common-ligatures;
+                font-kerning: normal;
+                margin-left: 2rem;
+                background-color: #fff;
+                color: #000;
+            }
+
+            body > ul > li {
+                font-size: larger;
+            }
+
+            h2 {
+                font-size: larger;
+                text-decoration-line: underline;
+                text-decoration-thickness: 2px;
+                margin: 0;
+                padding: 0.5rem 0;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0 0 2rem;
+                padding: 0 0 0 1rem;
+                text-indent: -1rem;
+            }
+
+            .success:before {
+                color: #4e9a06;
+                content: '✓';
+                padding-right: 0.5rem;
+            }
+
+            .defect {
+                color: #a40000;
+            }
+
+            .defect:before {
+                color: #a40000;
+                content: '✗';
+                padding-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Contact Crud (Tests\Feature\ContactCrud)</h2>
+        <ul>
+            <li class="success">Create contact</li>
+            <li class="success">Created contact is retrievable</li>
+            <li class="success">Edit contact</li>
+            <li class="success">Delete contact</li>
+            <li class="success">Edit non existent contact returns 404</li>
+            <li class="success">Delete non existent contact returns 404</li>
+            <li class="defect">Agent created contact is auto assigned to themselves</li>
+        </ul>
+        <h2>Invoice (Tests\Feature\Invoice)</h2>
+        <ul>
+            <li class="success">Generate invoice against active lease</li>
+            <li class="success">Invoice without vat has zero vat amount</li>
+            <li class="success">Cannot generate invoice without line items</li>
+            <li class="success">Cannot generate invoice against expired lease</li>
+            <li class="success">Lease with past end date but still active status can still be invoiced</li>
+            <li class="success">Cannot generate invoice against missing lease</li>
+            <li class="success">Mark invoice as paid</li>
+        </ul>
+        <h2>Known Issues (Tests\Feature\KnownIssues)</h2>
+        <ul>
+            <li class="success">Admin tenants create is stuck returning debug payload instead of creating a tenant</li>
+            <li class="success">Contact created by agent without explicit assigned to is invisible to that agent</li>
+            <li class="success">Require role rejection shape differs from response error shape</li>
+        </ul>
+        <h2>Lease (Tests\Feature\Lease)</h2>
+        <ul>
+            <li class="success">Create lease</li>
+            <li class="success">Create lease rejects missing required field with data set "missing tenant_name"</li>
+            <li class="success">Create lease rejects missing required field with data set "missing start_date"</li>
+            <li class="success">Create lease rejects missing required field with data set "missing end_date"</li>
+            <li class="success">Create lease rejects missing required field with data set "missing monthly_rent"</li>
+            <li class="success">Edit lease</li>
+            <li class="success">Listing leases auto expires past due ones</li>
+            <li class="success">Dashboard expiry warning includes lease expiring within 60 days</li>
+            <li class="success">Dashboard expiry warning excludes lease expiring beyond 60 days</li>
+            <li class="success">Dashboard expiry warning excludes already expired lease</li>
+        </ul>
+        <h2>Login (Tests\Feature\Login)</h2>
+        <ul>
+            <li class="success">Login succeeds for each role with data set "platform_superadmin"</li>
+            <li class="success">Login succeeds for each role with data set "super_admin"</li>
+            <li class="success">Login succeeds for each role with data set "admin"</li>
+            <li class="success">Login succeeds for each role with data set "finance_admin"</li>
+            <li class="success">Login succeeds for each role with data set "agent"</li>
+            <li class="success">Login by email also works with data set "platform_superadmin"</li>
+            <li class="success">Login by email also works with data set "super_admin"</li>
+            <li class="success">Login by email also works with data set "admin"</li>
+            <li class="success">Login by email also works with data set "finance_admin"</li>
+            <li class="success">Login by email also works with data set "agent"</li>
+            <li class="success">Session cookie grants access to protected route</li>
+            <li class="success">Logout invalidates session</li>
+            <li class="success">Request without cookie is unauthorized</li>
+        </ul>
+        <h2>Negative Security (Tests\Feature\NegativeSecurity)</h2>
+        <ul>
+            <li class="success">Login with wrong password fails</li>
+            <li class="success">Login with unknown username fails</li>
+            <li class="success">Login with empty credentials is rejected</li>
+            <li class="success">Login with missing password field is rejected</li>
+            <li class="success">Deactivated user cannot log in</li>
+            <li class="success">Suspended tenant user cannot log in</li>
+            <li class="success">Invalid session cookie is unauthorized</li>
+            <li class="success">Agent accessing platform admin route gets 403</li>
+            <li class="success">Agent deleting invoice gets 403</li>
+            <li class="success">Agent creating user gets 403</li>
+            <li class="success">Agent deleting lease gets 403</li>
+            <li class="success">Create contact with empty name is rejected</li>
+            <li class="success">Create contact with no name field at all is rejected</li>
+            <li class="success">Create user with missing required fields is rejected</li>
+            <li class="success">Create user with short password is rejected</li>
+            <li class="success">Create invoice without due date is rejected</li>
+            <li class="success">Create lease with empty body is rejected</li>
+            <li class="success">Sql injection in login username does not bypass auth with data set "classic tautology"</li>
+            <li class="success">Sql injection in login username does not bypass auth with data set "drop table"</li>
+            <li class="success">Sql injection in login username does not bypass auth with data set "union select"</li>
+            <li class="success">Sql injection in login username does not bypass auth with data set "comment truncation"</li>
+            <li class="success">Sql injection in contact name is stored as literal text with data set "classic tautology"</li>
+            <li class="success">Sql injection in contact name is stored as literal text with data set "drop table"</li>
+            <li class="success">Sql injection in contact name is stored as literal text with data set "union select"</li>
+            <li class="success">Sql injection in contact name is stored as literal text with data set "comment truncation"</li>
+            <li class="success">Sql injection in search query does not error or leak with data set "classic tautology"</li>
+            <li class="success">Sql injection in search query does not error or leak with data set "drop table"</li>
+            <li class="success">Sql injection in search query does not error or leak with data set "union select"</li>
+            <li class="success">Sql injection in search query does not error or leak with data set "comment truncation"</li>
+            <li class="success">Sql injection in contact id parameter is ignored</li>
+        </ul>
+        <h2>Rbac (Tests\Feature\Rbac)</h2>
+        <ul>
+            <li class="success">Agent cannot list invoices</li>
+            <li class="success">Finance admin can list invoices</li>
+            <li class="success">Admin can list invoices</li>
+            <li class="success">Agent cannot create lease</li>
+            <li class="success">Agent can read lease list</li>
+            <li class="success">Admin cannot delete lease</li>
+            <li class="success">Super admin can delete lease</li>
+            <li class="success">Agent cannot delete contact</li>
+            <li class="success">Admin can delete contact</li>
+            <li class="success">Agent users list only returns self</li>
+            <li class="success">Admin users list returns whole tenant but not other tenants</li>
+            <li class="success">Agent cannot create user</li>
+            <li class="success">Admin cannot create super admin</li>
+            <li class="success">Agent cannot delete user</li>
+            <li class="success">Tenant admin cannot access platform tenants route</li>
+            <li class="success">Agent cannot access platform tenants route</li>
+            <li class="success">Platform super admin can list tenants</li>
+            <li class="success">Admin cannot read contact from another tenant</li>
+            <li class="success">Agent list only shows own assigned contacts</li>
+        </ul>
+        <h2>Schema Integrity (Tests\Feature\SchemaIntegrity)</h2>
+        <ul>
+            <li class="success">Fresh install from database sql is missing tables the app requires</li>
+            <li class="success">Login attempts insert throws on a fresh database sql install</li>
+        </ul>
+        <h2>Smoke (Tests\Feature\Smoke)</h2>
+        <ul>
+            <li class="success">Server is up and login works</li>
+        </ul>
+    </body>
+</html>

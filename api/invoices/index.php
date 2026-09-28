@@ -43,10 +43,12 @@ switch ($method) {
             [$tenantId]
         );
 
-        $status = $_GET['status'] ?? '';
-        $params = [$tenantId];
-        $where  = 'i.tenant_id = ?';
-        if ($status) { $where .= ' AND i.status = ?'; $params[] = $status; }
+        $status    = $_GET['status'] ?? '';
+        $contactId = isset($_GET['contact_id']) && $_GET['contact_id'] !== '' ? (int)$_GET['contact_id'] : null;
+        $params    = [$tenantId];
+        $where     = 'i.tenant_id = ?';
+        if ($status)    { $where .= ' AND i.status = ?';     $params[] = $status; }
+        if ($contactId) { $where .= ' AND i.contact_id = ?'; $params[] = $contactId; }
 
         $rows = DB::query(
             "SELECT i.*, l.ref AS lease_ref

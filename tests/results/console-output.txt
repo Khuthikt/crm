@@ -1,0 +1,131 @@
+PHPUnit 9.6.36 by Sebastian Bergmann and contributors.
+
+Contact Crud (Tests\Feature\ContactCrud)
+ ✔ Create contact
+ ✔ Created contact is retrievable
+ ✔ Edit contact
+ ✔ Delete contact
+ ✔ Edit non existent contact returns 404
+ ✔ Delete non existent contact returns 404
+ ✘ Agent created contact is auto assigned to themselves
+   │
+   │ Failed asserting that 0 is identical to 5.
+   │
+   │ /var/www/html/crm/tests/Feature/ContactCrudTest.php:86
+   │
+
+Invoice (Tests\Feature\Invoice)
+ ✔ Generate invoice against active lease
+ ✔ Invoice without vat has zero vat amount
+ ✔ Cannot generate invoice without line items
+ ✔ Cannot generate invoice against expired lease
+ ✔ Lease with past end date but still active status can still be invoiced
+ ✔ Cannot generate invoice against missing lease
+ ✔ Mark invoice as paid
+
+Known Issues (Tests\Feature\KnownIssues)
+ ✔ Admin tenants create is stuck returning debug payload instead of creating a tenant
+ ✔ Contact created by agent without explicit assigned to is invisible to that agent
+ ✔ Require role rejection shape differs from response error shape
+
+Lease (Tests\Feature\Lease)
+ ✔ Create lease
+ ✔ Create lease rejects missing required field with data set "missing tenant_name"
+ ✔ Create lease rejects missing required field with data set "missing start_date"
+ ✔ Create lease rejects missing required field with data set "missing end_date"
+ ✔ Create lease rejects missing required field with data set "missing monthly_rent"
+ ✔ Edit lease
+ ✔ Listing leases auto expires past due ones
+ ✔ Dashboard expiry warning includes lease expiring within 60 days
+ ✔ Dashboard expiry warning excludes lease expiring beyond 60 days
+ ✔ Dashboard expiry warning excludes already expired lease
+
+Login (Tests\Feature\Login)
+ ✔ Login succeeds for each role with data set "platform_superadmin"
+ ✔ Login succeeds for each role with data set "super_admin"
+ ✔ Login succeeds for each role with data set "admin"
+ ✔ Login succeeds for each role with data set "finance_admin"
+ ✔ Login succeeds for each role with data set "agent"
+ ✔ Login by email also works with data set "platform_superadmin"
+ ✔ Login by email also works with data set "super_admin"
+ ✔ Login by email also works with data set "admin"
+ ✔ Login by email also works with data set "finance_admin"
+ ✔ Login by email also works with data set "agent"
+ ✔ Session cookie grants access to protected route
+ ✔ Logout invalidates session
+ ✔ Request without cookie is unauthorized
+
+Negative Security (Tests\Feature\NegativeSecurity)
+ ✔ Login with wrong password fails
+ ✔ Login with unknown username fails
+ ✔ Login with empty credentials is rejected
+ ✔ Login with missing password field is rejected
+ ✔ Deactivated user cannot log in
+ ✔ Suspended tenant user cannot log in
+ ✔ Invalid session cookie is unauthorized
+ ✔ Agent accessing platform admin route gets 403
+ ✔ Agent deleting invoice gets 403
+ ✔ Agent creating user gets 403
+ ✔ Agent deleting lease gets 403
+ ✔ Create contact with empty name is rejected
+ ✔ Create contact with no name field at all is rejected
+ ✔ Create user with missing required fields is rejected
+ ✔ Create user with short password is rejected
+ ✔ Create invoice without due date is rejected
+ ✔ Create lease with empty body is rejected
+ ✔ Sql injection in login username does not bypass auth with data set "classic tautology"
+ ✔ Sql injection in login username does not bypass auth with data set "drop table"
+ ✔ Sql injection in login username does not bypass auth with data set "union select"
+ ✔ Sql injection in login username does not bypass auth with data set "comment truncation"
+ ✔ Sql injection in contact name is stored as literal text with data set "classic tautology"
+ ✔ Sql injection in contact name is stored as literal text with data set "drop table"
+ ✔ Sql injection in contact name is stored as literal text with data set "union select"
+ ✔ Sql injection in contact name is stored as literal text with data set "comment truncation"
+ ✔ Sql injection in search query does not error or leak with data set "classic tautology"
+ ✔ Sql injection in search query does not error or leak with data set "drop table"
+ ✔ Sql injection in search query does not error or leak with data set "union select"
+ ✔ Sql injection in search query does not error or leak with data set "comment truncation"
+ ✔ Sql injection in contact id parameter is ignored
+
+Rbac (Tests\Feature\Rbac)
+ ✔ Agent cannot list invoices
+ ✔ Finance admin can list invoices
+ ✔ Admin can list invoices
+ ✔ Agent cannot create lease
+ ✔ Agent can read lease list
+ ✔ Admin cannot delete lease
+ ✔ Super admin can delete lease
+ ✔ Agent cannot delete contact
+ ✔ Admin can delete contact
+ ✔ Agent users list only returns self
+ ✔ Admin users list returns whole tenant but not other tenants
+ ✔ Agent cannot create user
+ ✔ Admin cannot create super admin
+ ✔ Agent cannot delete user
+ ✔ Tenant admin cannot access platform tenants route
+ ✔ Agent cannot access platform tenants route
+ ✔ Platform super admin can list tenants
+ ✔ Admin cannot read contact from another tenant
+ ✔ Agent list only shows own assigned contacts
+
+Schema Integrity (Tests\Feature\SchemaIntegrity)
+ ✔ Fresh install from database sql is missing tables the app requires
+ ✔ Login attempts insert throws on a fresh database sql install
+
+Smoke (Tests\Feature\Smoke)
+ ✔ Server is up and login works
+
+Time: 01:07.315, Memory: 8.00 MB
+
+Summary of non-successful tests:
+
+Contact Crud (Tests\Feature\ContactCrud)
+ ✘ Agent created contact is auto assigned to themselves
+   │
+   │ Failed asserting that 0 is identical to 5.
+   │
+   │ /var/www/html/crm/tests/Feature/ContactCrudTest.php:86
+   │
+
+FAILURES!
+Tests: 92, Assertions: 342, Failures: 1.

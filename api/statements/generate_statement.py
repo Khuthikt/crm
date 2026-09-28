@@ -14,6 +14,10 @@ lease     = data.get('lease', {})
 invoices  = data.get('invoices', [])
 settings  = data.get('settings', {})
 tenant_c  = data.get('tenant_contact', {})
+# Clean up None strings
+def clean(v): return '' if v is None or str(v) == 'None' else str(v)
+for d in [tenant_c]:
+    for k in d: d[k] = clean(d[k])
 landlord  = data.get('landlord', {})
 
 _primary = settings.get('primary_colour', '#0A1A3B')
